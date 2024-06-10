@@ -13,3 +13,9 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.youtube_title
+    
+class Chat(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    message = models.TextField()
+    response = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
