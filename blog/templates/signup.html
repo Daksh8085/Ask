@@ -1,13 +1,38 @@
-{% include 'main.html' %}
+{% include 'main.html' %} {% block content %}
+<header>
+    <div class="logo">Ask</div>
+    <div class="pages">
+        {% if user.is_authenticated %}
+        <a href="{% url 'index' %}">Welcome {{ user.username }}</a>
+        {% else %}
+        <a href="/">Welcome User</a>
+        {% endif %}
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'signin' %}">Login</a>
+    </div>
+</header>
+<div class="container">
+    <div class="wrapper">
+        <form method="post">
+            <h1>Register</h1>
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input
+                type="text"
+                name="username" />
+            <label for="password">Password:</label>
+            <input
+                type="password"
+                name="password" />
 
-{% block content %}
-    <h1>Register</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        <h3>Username: </h3>
-        <input type="text" name="username">
-        <h3>Password: </h3>
-        <input type="password" name="password">
-        <input type="submit" value="signup">
-    </form>
+            <label for="re-password">Confirm Password:</label>
+            <input
+                type="password"
+                name="re-password" />
+            <button type="submit">signup</button>
+        </form>
+    </div>
+</div>
+
 {% endblock %}

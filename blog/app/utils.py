@@ -54,7 +54,6 @@ def generateContent(transcript):
             {'role': 'assistant', 'content': transcript},
             {'role': 'user', 'content': 'write a comprehensive blog article, without the title, it should be just long paragraph without introduction point thing'}
         ]
-        
     )
     return response.choices[0].message.content
 
@@ -65,3 +64,17 @@ def audio_link(link):
 
 def get_transcript(link):
     pass
+
+
+def chat_response(message, data):
+    ai.api_key = os.getenv('openai_api_key')
+    response =  response = ai.chat.completions.create(
+        model = 'gpt-3.5-turbo-16k',
+        max_tokens = 1000,
+        messages = [
+            {'role': 'assistant', 'content': data},
+            {'role': 'user', 'content': message}
+        ]
+    )
+
+    return response.choices[0].message.content

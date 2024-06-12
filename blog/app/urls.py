@@ -11,4 +11,6 @@ urlpatterns = [
 
 
     path('about', views.about, name='about'),
+    path('all_blog', views.all_blog, name='all_blog'),
+
 ]

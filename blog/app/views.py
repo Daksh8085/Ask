@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 import json
 from .utils import yt_title, yt_subtitle, generateContent
+from .models import Blog
 
 
 # Create your views here.
@@ -20,14 +21,12 @@ def signin(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect ("/")
-    
+            return redirect ("/")    
         return HttpResponse("Invalid credentials")
-
 
     return render(request, "signin.html")
 
@@ -37,7 +36,7 @@ def signup(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user = User.objects.create_user(username, "", password)
+        user = User.objects.create_user(username=username, password=password)
         user.save()
         login(request, user)
         return redirect ("/")
@@ -54,6 +53,8 @@ def signout(request):
 @login_required(login_url="signin")
 @csrf_exempt
 def generate(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=405)
     try:
         print("It enter")
         data = json.loads(request.body)
@@ -76,9 +77,23 @@ def generate(request):
     if content is None:
         return JsonResponse({"error": "Failed to generate content"}, status=500)
     print(content)
-    return JsonResponse({"content": content})
+
+
+    blog = Blog.objects.create(
+        user=request.user, 
+        youtube_link=yt_link,
+        youtube_title=title, 
+        generated_content=content,
+    )
+
+    blog.save()
+    return JsonResponse({"content": content, "title": title})
 
 
 
 def about(request):
     return render(request, 'about.html')
+
+
+def all_blog(request):
+    return render(request, "all_blog.html")
