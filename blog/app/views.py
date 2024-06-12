@@ -11,7 +11,7 @@ from .models import Blog
 
 # Create your views here.
 
-
+@login_required(login_url="signin")
 def index(request):
     return render(request, "index.html")
 
@@ -50,7 +50,7 @@ def signout(request):
 
 
 
-@login_required(login_url="signin")
+
 @csrf_exempt
 def generate(request):
     if request.method != "POST":

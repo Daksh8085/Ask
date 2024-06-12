@@ -30,9 +30,7 @@ def yt_subtitle(link):
     if (video := extract_youtube_subtitle(video_id)) != None:
         return video
     else:
-        # audio_file = get_audio(video_id)
-        # transcript = 
-        return None
+        return get_transcript(video_id)
 
 def extract_youtube_subtitle(video_id) -> str:
     try:
@@ -59,11 +57,29 @@ def generateContent(transcript):
 
 
 def audio_link(link):
-    pass
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': 'media/%(title)s.%(ext)s',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(link, download=True)
+        audio_file = f'media/{info["title"]}.mp3'
+    return audio_file
 
 
 def get_transcript(link):
-    pass
+    audio_file = audio_link(link)
+    aai.settings.api_key = os.getenv('assembly_ai_api_key')
+
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(audio_file)
+    return transcript.text
 
 
 def chat_response(message, data):
@@ -76,5 +92,4 @@ def chat_response(message, data):
             {'role': 'user', 'content': message}
         ]
     )
-
     return response.choices[0].message.content
