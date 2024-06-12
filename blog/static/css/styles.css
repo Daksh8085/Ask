@@ -80,6 +80,7 @@ header a:hover::before {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 20px;
 }
 
 .wrapper {
@@ -394,4 +395,21 @@ hr {
 
 .wrapper form h1 {
     text-align: center;
+}
+
+#change {
+    color: #000;
+    text-decoration: none;
+}
+
+#change .wrapper h1 {
+    font-size: 25px;
+    margin-bottom:25px;
+    font-weight: 600;
+    font-family: 'Roboto';
+}
+
+#change .wrapper p {
+    font-size: 15px;
+    margin-bottom: 10px;
 }

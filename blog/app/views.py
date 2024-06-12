@@ -78,7 +78,6 @@ def generate(request):
         return JsonResponse({"error": "Failed to generate content"}, status=500)
     print(content)
 
-
     blog = Blog.objects.create(
         user=request.user, 
         youtube_link=yt_link,
@@ -96,4 +95,13 @@ def about(request):
 
 
 def all_blog(request):
-    return render(request, "all_blog.html")
+    blog_articles = Blog.objects.filter(user=request.user)
+    return render(request, "all_blog.html", {'blog_articles': blog_articles})
+
+
+def detail(request, id):
+    blog = Blog.objects.get(id=id)
+    if request.user == blog.user:
+        return render(request, "details.html", {'blog': blog})
+    else:
+        return redirect('/')

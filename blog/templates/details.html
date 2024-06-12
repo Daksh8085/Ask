@@ -1,0 +1,27 @@
+{% include 'main.html' %} {% block content %}
+<header>
+    <div class="logo">Ask</div>
+    <div class="pages">
+        {% if user.is_authenticated %}
+        <a href="{% url 'index' %}">Welcome {{ user.username }}</a>
+        {% else %}
+        <a href="/">Welcome User</a>
+        {% endif %}
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'all_blog' %}">Search</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'signout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'signin' %}">Login</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="container">
+    <div class="wrapper">
+            <h4>{{blog.youtube_title}}</h4>
+            <p>{{blog.generated_content|safe}}</p>
+    </div>
+</div>
+
+{% endblock %}
